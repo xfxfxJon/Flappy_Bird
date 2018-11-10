@@ -85,6 +85,9 @@ window.onload = function () {
 
             // 开始页面
             drawStartPage(imgs, objs);
+
+
+
         }
 
 
@@ -96,6 +99,7 @@ window.onload = function () {
     // 开始页面
     function drawStartPage(imgs, objs) {
         var startTime = Date.now();
+        var isStart = true;
 
         function run() {
             var now = Date.now();
@@ -114,13 +118,26 @@ window.onload = function () {
             con.drawImage(imgs.play_btn, 0, 0, 116, 70, 25, 340, 116, 70); //绘制开始按钮
             con.drawImage(imgs.button_score, 151, 340); //绘制得分按钮
             con.drawImage(imgs.button_rate, 110, 280); //绘制rate
+            con.drawImage(imgs.brand_copyright, 81, 420);
 
             // 绘制会飞的鸟
             objs.bird0.updateForStart(dt);
             objs.bird0.drawForStart();
-
-            requestAnimationFrame(run);
+            if (isStart) {
+                requestAnimationFrame(run);
+            }
         }
         requestAnimationFrame(run);
+
+        // 给开始按钮添加监听事件
+        myCanvas.addEventListener("click", function (e) {
+            e = e || window.event;
+            var x = e.offsetX;
+            var y = e.offsetY;
+            if (x >= 23 && x <= 135 && y >= 340 && y <= 405) {
+                isStart = false;
+                // 跳转到游戏页面
+            }
+        }, false);
     }
 };
