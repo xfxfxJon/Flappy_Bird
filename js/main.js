@@ -57,6 +57,14 @@ window.onload = function () {
             src: "img/title.png"
         },
         {
+            name: "text_ready",
+            src: "img/text_ready.png"
+        },
+        {
+            name: "text_game_over",
+            src: "img/text_game_over.png"
+        },
+        {
             name: "button_rate",
             src: "img/button_rate.png"
         },
@@ -72,29 +80,83 @@ window.onload = function () {
             name: "land",
             src: "img/land.png"
         },
+        {
+            name: "tutorial",
+            src: "img/tutorial.png"
+        },
+        // 分数
+        {
+            name: "048",
+            src: "img/font_048.png"
+        },
+        {
+            name: "049",
+            src: "img/font_049.png"
+        },
+        {
+            name: "050",
+            src: "img/font_050.png"
+        },
+        {
+            name: "051",
+            src: "img/font_051.png"
+        },
+        {
+            name: "052",
+            src: "img/font_052.png"
+        },
+        {
+            name: "053",
+            src: "img/font_053.png"
+        },
+        {
+            name: "054",
+            src: "img/font_054.png"
+        },
+        {
+            name: "055",
+            src: "img/font_055.png"
+        },
+        {
+            name: "056",
+            src: "img/font_056.png"
+        },
+        {
+            name: "057",
+            src: "img/font_057.png"
+        },
+
     ];
 
-
+    // 加载开始
     load(imgs, function (imgs) {
         if (imgs) {
+            // 配置参数
+            var speed = -0.1;
             // 创建对象
             var objs = {};
-            objs.land1 = new Land(imgs.land, 336 * 0, -0.3, con); //land1
-            objs.land2 = new Land(imgs.land, 336 * 1, -0.3, con); //land2
-            objs.bird0 = new Bird(imgs.bird0_0, imgs.bird0_1, imgs.bird0_2, 150, 200, 0.0003, 0.0006, 0, con);
+            objs.land1 = new Land(imgs.land, 336 * 0, speed, con); //land1
+            objs.land2 = new Land(imgs.land, 336 * 1, speed, con); //land2
+            objs.bird0 = new Bird(imgs.bird0_0, imgs.bird0_1, imgs.bird0_2, 125, 200, 0.0003, 0.0006, 0, con);
+            objs.sky1 = new Sky(imgs.night, speed, 228 * 0,con);
+            objs.sky2 = new Sky(imgs.night, speed, 228 * 1,con);
 
             // 开始页面
             drawStartPage(imgs, objs);
-
-
-
         }
-
-
-
-
-
     });
+
+    // 分数在中间显示
+    function drawScore(imgs, score) {
+        score = score.toString();
+        var width = 0;
+        if (score.length == 1) {
+            con.drawImage(imgs["0" + score.charCodeAt(0)], 132, 80);
+        }
+        // for(var i = 0; i< i<score.length; i++){
+
+        // }
+    }
 
     // 开始页面
     function drawStartPage(imgs, objs) {
@@ -105,7 +167,7 @@ window.onload = function () {
             var now = Date.now();
             dt = now - startTime;
             startTime = now;
-            con.drawImage(imgs.day, 0, 0); //绘制开始页面的蓝天
+            con.drawImage(imgs.night, 0, 0); //绘制开始页面的蓝天
 
             // 绘制动态的land
             objs.land1.setCount(2);
@@ -130,14 +192,110 @@ window.onload = function () {
         requestAnimationFrame(run);
 
         // 给开始按钮添加监听事件
-        myCanvas.addEventListener("click", function (e) {
+        myCanvas.addEventListener("click", paly = function (e) {
             e = e || window.event;
             var x = e.offsetX;
             var y = e.offsetY;
             if (x >= 23 && x <= 135 && y >= 340 && y <= 405) {
                 isStart = false;
-                // 跳转到游戏页面
+                // alert(1);
+                myCanvas.removeEventListener("click", paly, false);
+                // 跳转到游戏准备页面
+                drawReadyPage(imgs, objs);
             }
         }, false);
     }
+
+    // 绘制游戏准备页面
+    function drawReadyPage(imgs, objs) {
+        objs.bird0 = new Bird(imgs.bird0_0, imgs.bird0_1, imgs.bird0_2, 75, 220, 0.0003, 0.0006, 0, con);
+        var startTime = Date.now();
+        var isStart = true;
+
+        function run() {
+            var now = Date.now();
+            dt = now - startTime;
+            startTime = now;
+            con.drawImage(imgs.night, 0, 0); //绘制开始页面的蓝天
+
+            // 绘制动态的land
+            objs.land1.setCount(2);
+            objs.land1.update(dt);
+            objs.land1.draw();
+            objs.land2.update(dt);
+            objs.land2.draw();
+
+            drawScore(imgs, 0); //绘制分数
+            con.drawImage(imgs.text_ready, 50, 150); //绘制游戏ready
+            con.drawImage(imgs.tutorial, 87, 220); //绘制游戏提示
+
+
+            // 绘制会飞的鸟
+            objs.bird0.updateForStart(dt);
+            objs.bird0.drawForStart();
+            if (isStart) {
+                requestAnimationFrame(run);
+            }
+        }
+        requestAnimationFrame(run);
+
+        // 给开始按钮添加监听事件
+        myCanvas.addEventListener("click", paly = function (e) {
+            isStart = false;
+            // alert(1);
+            myCanvas.removeEventListener("click", paly, false);
+            // 跳转到游戏准备页面
+            drawGame(imgs, objs);
+        }, false);
+    }
+
+    // 绘制游戏中界面
+    function drawGame(imgs, objs) {
+        var startTime = Date.now();
+        var isStart = true;
+
+        function run() {
+            var now = Date.now();
+            dt = now - startTime;
+            startTime = now;
+
+            // 绘制动态的蓝天
+            objs.sky1.setCount(2);
+            objs.sky1.update(dt);
+            objs.sky1.draw();
+            objs.sky2.update(dt);
+            objs.sky2.draw();
+
+            // 绘制动态的land
+            objs.land1.setCount(2);
+            objs.land1.update(dt);
+            objs.land1.draw();
+            objs.land2.update(dt);
+            objs.land2.draw();
+
+            drawScore(imgs, 0); //绘制分数
+
+            // 绘制会飞的鸟
+            objs.bird0.update(dt);
+            objs.bird0.draw();
+
+
+            
+            if (isStart) {
+                requestAnimationFrame(run);
+            }
+        }
+        requestAnimationFrame(run);
+
+        // 给开始按钮添加监听事件
+        myCanvas.addEventListener("click", paly = function (e) {
+            isStart = false;
+            // alert(1);
+            myCanvas.removeEventListener("click", paly, false);
+            // 跳转到游戏准备页面
+            drawGame(imgs, objs);
+        }, false);
+    }
+
+
 };
