@@ -9,7 +9,7 @@ function load(imgs, callback) {
         imgObjs[imgs[i].name].onload = function () {
             count++;
             if (count == imgs.length) {
-                callback(true);
+                callback(imgObjs);
             }
         };
     }
