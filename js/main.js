@@ -116,7 +116,7 @@ window.onload = function () {
             con.drawImage(imgs.button_rate, 110, 280); //绘制rate
 
             // 绘制会飞的鸟
-            objs.bird0.update(dt);
+            objs.bird0.updateForStart(dt);
             objs.bird0.drawForStart();
 
             requestAnimationFrame(run);

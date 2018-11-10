@@ -14,7 +14,7 @@ var Bird = function (img0, img1, img2, x, y, speed, step, hight, con) {
     this.index = 0; //小鸟的动作(一共三张图片)
 };
 
-Bird.prototype.update = function (duration) {
+Bird.prototype.updateForStart = function (duration) {
     durMax += duration;
 
     if (durMax > 150) {
