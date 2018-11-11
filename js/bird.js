@@ -31,8 +31,6 @@ Bird.prototype.updateForStart = function (duration) {
     } else if (this.height <= 0) {
         heightStep = Math.abs(heightStep);
     }
-
-    // this.speed = this.speed + this.a * this.duration;
 };
 
 Bird.prototype.drawForStart = function () {
@@ -50,14 +48,14 @@ Bird.prototype.update = function (duration) {
         durMax -= 150;
     }
 
-    this.speed = this.speed + this.a * this.duration;
+    this.speed = this.speed + this.step * duration;
     this.y = this.y + this.speed * duration;
 };
 
 Bird.prototype.draw = function () {
     this.con.save();
     this.con.translate(this.x, this.y);
-    this.con.rotate(Math.Pi / 6 * this.speed);
-    this.con.drawImage(this["img" + this.index], this.x, this.y);
+    this.con.rotate(Math.PI / 6 * this.speed / 0.3);
+    this.con.drawImage(this["img" + this.index], -24, -24);
     this.con.restore();
 };

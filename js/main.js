@@ -125,6 +125,14 @@ window.onload = function () {
             name: "057",
             src: "img/font_057.png"
         },
+        {
+            name: "pipe_down",
+            src: "img/pipe_down.png"
+        },
+        {
+            name: "pipe_up",
+            src: "img/pipe_up.png"
+        },
 
     ];
 
@@ -138,8 +146,11 @@ window.onload = function () {
             objs.land1 = new Land(imgs.land, 336 * 0, speed, con); //land1
             objs.land2 = new Land(imgs.land, 336 * 1, speed, con); //land2
             objs.bird0 = new Bird(imgs.bird0_0, imgs.bird0_1, imgs.bird0_2, 125, 200, 0.0003, 0.0006, 0, con);
-            objs.sky1 = new Sky(imgs.night, speed, 228 * 0,con);
-            objs.sky2 = new Sky(imgs.night, speed, 228 * 1,con);
+            objs.sky1 = new Sky(imgs.night, speed, 288 * 0, con);
+            objs.sky2 = new Sky(imgs.night, speed, 288 * 1, con);
+            objs.pipe1 = new Pipe(imgs.pipe_up, imgs.pipe_down, 400, speed, con);
+            objs.pipe2 = new Pipe(imgs.pipe_up, imgs.pipe_down, 400 + 146, speed, con);
+            objs.pipe3 = new Pipe(imgs.pipe_up, imgs.pipe_down, 400 + 146 * 2, speed, con);
 
             // 开始页面
             drawStartPage(imgs, objs);
@@ -273,14 +284,23 @@ window.onload = function () {
             objs.land2.update(dt);
             objs.land2.draw();
 
-            drawScore(imgs, 0); //绘制分数
+
+            // 绘制柱子
+            objs.pipe1.setCount(3, 120);
+            objs.pipe1.update(dt);
+            objs.pipe1.draw();
+            objs.pipe2.update(dt);
+            objs.pipe2.draw();
+            objs.pipe3.update(dt);
+            objs.pipe3.draw();
 
             // 绘制会飞的鸟
             objs.bird0.update(dt);
             objs.bird0.draw();
 
+            drawScore(imgs, 0); //绘制分数
 
-            
+
             if (isStart) {
                 requestAnimationFrame(run);
             }
@@ -289,11 +309,7 @@ window.onload = function () {
 
         // 给开始按钮添加监听事件
         myCanvas.addEventListener("click", paly = function (e) {
-            isStart = false;
-            // alert(1);
-            myCanvas.removeEventListener("click", paly, false);
-            // 跳转到游戏准备页面
-            drawGame(imgs, objs);
+            objs.bird0.speed = -0.24;
         }, false);
     }
 
